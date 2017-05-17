@@ -19,7 +19,7 @@ class PostsController extends Controller
      */
     public function index()
     {
-        $posts = $this->post->all();
+        $posts = $this->post->paginate('10');
 
         return view('posts.index', compact('posts'));
     }
@@ -31,7 +31,7 @@ class PostsController extends Controller
      */
     public function create()
     {
-        //
+        return view('posts.create');
     }
 
     /**
@@ -42,7 +42,9 @@ class PostsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->post->create($request->all());
+
+        return redirect(action('PostsController@index'));
     }
 
     /**
@@ -53,7 +55,9 @@ class PostsController extends Controller
      */
     public function show($id)
     {
-        //
+        $post = $this->post->find($id);
+
+        return view('posts.show', compact('post'));
     }
 
     /**
@@ -64,7 +68,9 @@ class PostsController extends Controller
      */
     public function edit($id)
     {
-        //
+        $post = $this->post->find($id);
+
+        return view('posts.edit', compact('post'));
     }
 
     /**
@@ -76,7 +82,11 @@ class PostsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $post = $this->post->find($id);
+
+        $post->update($request->all());
+
+        return redirect(action('PostsController@index'));
     }
 
     /**
@@ -87,6 +97,10 @@ class PostsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $post = $this->post->find($id);
+
+        $post->delete();
+        
+        return redirect(action('PostsController@index'));
     }
 }
